@@ -1,20 +1,19 @@
 pipeline{
     
-    agent any
-    
-	tools 
+    agent 
 	{
-        maven 'Maven 3.6.1' 
-    }
-	
+		docker 
+		{
+			image 'maven:3.6.1-jdk-8-slim'
+		}
+	}
+    
+
     stages
 	{
         stage(one)
         {
-			when
-			{
-				changeset "**/worker/**"
-			}
+
             steps
             {
                 echo 'stage 1'
@@ -27,10 +26,7 @@ pipeline{
         }
         stage(two)
         {
-			when 
-			{
-				changeset "**/worker/**"
-			}
+
             steps
             {
                 echo 'stage 2'
@@ -41,23 +37,6 @@ pipeline{
                 sleep 4
             }    
         }
-        stage(three)
-        {
-			when
-			{
-				branch "master"
-				changeset "**/worker/**"
-			}
-            steps
-            {
-                echo 'stage 3'
-				dir('worker')
-				{
-					sh 'mvn package'
-				}
-                sleep 5
-            }    
-        }
         
     }
     
@@ -65,7 +44,6 @@ pipeline{
     { 
         always 
         { 
-			archiveArtifacts artifacts: '**/target/*.jar'
             echo 'pipeline is completed'
 			
         }
