@@ -1,20 +1,18 @@
 pipeline{
     
-    agent any
-    
-	tools 
+    agent 
 	{
-        nodejs 'NodeJS 8.9.0'
-    }
+		docker 
+		{
+			image 'node:7-alpine'
+		}
+	}
 	
     stages
 	{
         stage(one)
         {
-			when
-			{
-				changeset "**/result/**"
-			}
+			
             steps
             {
                 echo 'stage 1'
@@ -27,10 +25,7 @@ pipeline{
         }
         stage(two)
         {
-			when 
-			{
-				changeset "**/result/**"
-			}
+			
             steps
             {
                 echo 'stage 2'
